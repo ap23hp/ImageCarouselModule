@@ -1,35 +1,38 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// webpack.config.js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: './src/index.js',
+  mode: "development",
+  entry: "./src/index.js",
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true, // cleans old build files
-    library: 'createCarousel',
-    libraryTarget: 'umd' // so it can be used as module or in browser
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
+  devtool: "eval-source-map",
+  devServer: {
+    watchFiles: ["./src/index.html"],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader','css-loader'],
+        use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|jpe?g|avif|gif|svg)$/i,
-        type: 'asset/resource',
-      }
-    ]
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|avif)$/i,
+        type: "asset/resource",
+      },
+    ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-    })
-  ],
-  devServer: {
-    static: './dist',
-    port: 8080,
-    open: true
-  }
 };
